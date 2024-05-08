@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<endpoints xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./additional_info.xsd">
+	<endpoint uri="/gateway/identification" facet="Base" endpointGroup="GTW" name="IDENT">
+		<method name="GET"/>
+	</endpoint>
+	<endpoint uri="/gateway/capabilities" facet="Base" endpointGroup="GTW" name="CAPA">
+		<method name="GET"/>
+	</endpoint>
+	<endpoint uri="/gateway/configuration" facet="Base" endpointGroup="GTW" name="CONF">
+		<method name="GET" excludeFromAutoGenTests="true"/>
+		<method name="POST" excludeFromAutoGenTests="true"/>
+	</endpoint>
+	<endpoint uri="/gateway/reboot" facet="Base" endpointGroup="GTW" name="RSET">
+		<method name="POST" excludeFromAutoGenTests="true"/>
+	</endpoint>
+	<endpoint uri="/masters" facet="Base" endpointGroup="MAS" name="MTRS">
+		<method name="GET"/>
+	</endpoint>
+	<endpoint uri="/masters/{masterNumber}/identification" facet="Base" endpointGroup="MAS" name="IDEN">
+		<method name="GET"/>
+		<method name="POST">
+			<constrains>
+				<constrain name="TAGS">
+					<description>Tags are all optional to enable setting one of them at a time. For completeness testing we can assume that all are mandatory.</description>
+					<request>
+						<property name="applicationSpecificTag" required="true"/>
+						<property name="locationTag" required="true"/>
+						<property name="functionTag" required="true"/>
+					</request>
+				</constrain>
+			</constrains>
+		</method>
+	</endpoint>
+	<endpoint uri="/masters/{masterNumber}/ports/{portNumber}/configuration" facet="Base" endpointGroup="POR" name="CONF">
+		<method name="GET"/>
+		<method name="POST">
+			<constrains>
+				<constrain name="MANUAL">
+					<description>Additional properties become required when the port is configured in IO-Link manual mode.</description>
+					<request>
+						<property name="mode">
+							<value>IOLINK_MANUAL</value>
+						</property>
+						<property name="validationAndBackup" required="true"/>
+						<property name="cycleTime" required="true"/>
+						<property name="vendorId" required="true"/>
+						<property name="deviceId" required="true"/>
+					</request>
+				</constrain>
+				<constrain name="MODE">
+					<description>Generate test case with mode property.</description>
+					<request>
+						<property name="mode" required="true"/>
+					</request>
+				</constrain>
+				<constrain name="IQ">
+					<description>Generate testcase with iqConfiguration property. Value fixed, listed are supported by all of the Master types.</description>
+					<request>
+						<property name="iqConfiguration">
+							<value>NOT_SUPPORTED</value>
+						</property>
+					</request>
+				</constrain>
+			</constrains>
+		</method>
+	</endpoint>
+</endpoints>
